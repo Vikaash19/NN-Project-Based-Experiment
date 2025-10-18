@@ -1,4 +1,4 @@
-# Project Based Experiments
+# Project Based Experiment
 ## Objective :
  Build a Multilayer Perceptron (MLP) to classify handwritten digits in python
 ## Steps to follow:
