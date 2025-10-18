@@ -1,4 +1,4 @@
-#Project Based Experiments
+# Project Based Experiments
 ## Objective :
  Build a Multilayer Perceptron (MLP) to classify handwritten digits in python
 ## Steps to follow:
@@ -28,9 +28,50 @@ If the model is not performing well, experiment with different architectures, re
 Visualize the training/validation loss and accuracy over epochs to understand the training process. Visualize some misclassified examples to gain insights into potential improvements.
 
 # Program:
-Insert your code here
+```
 
+import numpy as np
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+from tensorflow.keras.utils import to_categorical
+import matplotlib.pyplot as plt
+
+(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train = x_train.reshape(60000, 784).astype('float32') / 255
+x_test = x_test.reshape(10000, 784).astype('float32') / 255
+
+y_train = to_categorical(y_train, 10)
+y_test = to_categorical(y_test, 10)
+
+model = Sequential()
+model.add(Dense(512, activation='relu', input_shape=(784,)))
+model.add(Dropout(0.2))
+model.add(Dense(512, activation='relu'))
+model.add(Dropout(0.2))
+model.add(Dense(10, activation='softmax'))
+
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+model.fit(x_train, y_train, batch_size=128, epochs=5, validation_data=(x_test, y_test))
+
+score = model.evaluate(x_test, y_test)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
+
+predictions = model.predict(x_test)
+
+for i in range(9):
+    img = x_test[i].reshape(28, 28)
+    pred = np.argmax(predictions[i])
+    label = np.argmax(y_test[i])
+    print(f'Prediction: {pred}, Label: {label}')
+    plt.subplot(3, 3, i+1)
+    plt.imshow(img, cmap='gray')
+    plt.title(f'Pred: {pred}, Label: {label}')
+    plt.xticks([])
+    plt.yticks([])
+plt.show()
+```
 ## Output:
-Show your results here
-
-
+<img width="677" height="720" alt="handwritten digit output" src="https://github.com/user-attachments/assets/7cde483e-6ca7-4b85-af01-6c932f046c61" />
